@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "984rohrjknfr239thjfds"
@@ -34,11 +35,12 @@ def signup():
         email = request.form.get("email")
         password = request.form.get("password")
         confirm_password = request.form.get("confirm_password")
+        
         if password == confirm_password:
             if not User.query.filter_by(email = email).first():
                 new_user = User(
                     email = email,
-                    password = password,
+                    password = generate_password_hash(password=password, salt_length=8),
                 )
                 db.session.add(new_user)
                 db.session.commit()
@@ -57,7 +59,7 @@ def signin():
         password = request.form.get("password")
         user = User.query.filter_by(email = email).first()
         if user:
-            if user.password == password:
+            if check_password_hash(user.password, password):
                 login_user(user)
                 return redirect(url_for('profile'))
             else:
