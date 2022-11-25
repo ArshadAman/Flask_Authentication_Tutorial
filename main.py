@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -47,7 +47,8 @@ def signup():
                 login_user(new_user)
                 return redirect(url_for('profile'))
             else:
-                return "User already exits"
+                flash("An account already exist with this email", "info")
+                return redirect(url_for("signin"))
         else:
             return "<h1>Password Didnot match</h1>"
     return render_template("signup.html")
@@ -63,8 +64,11 @@ def signin():
                 login_user(user)
                 return redirect(url_for('profile'))
             else:
-                return "Password did't match"
+                flash("Please check the credentials", "error")
+                return redirect(url_for("signin"))
         else:
+            flash("The requested user does not exists", "error")
+            flash("Please create an account and be the part of this mega authentication revolution", "info")
             return redirect(url_for("signup"))
     return render_template("login.html")
 

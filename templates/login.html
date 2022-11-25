@@ -1,17 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 </head>
+
 <body>
+    <style>
+        .error{
+            color: red;
+        }
+        .warning{
+            color: rgb(61, 61, 6);
+        }
+        .info{
+            color: seagreen;
+        }
+        ul, form{
+            display: flex;
+            justify-content: center;
+        }
+        ul li{
+            list-style: none;
+        }
+    </style>
     <h1>Login</h1>
+    {% with messages = get_flashed_messages(with_categories = true) %}
+    {% if messages %}
+    <ul class=flashes>
+        {% for categories, message in messages %}
+        <li class="{{categories}}">{{message}}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
     <form action="" method="post">
         <input type="email" name="email" id="email" placeholder="Enter your Email">
         <input type="password" name="password" id="password" placeholder="Enter password">
         <button type="submit">Login</button>
     </form>
 </body>
+
 </html>

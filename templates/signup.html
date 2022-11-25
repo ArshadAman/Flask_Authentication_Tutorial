@@ -7,7 +7,22 @@
     <title>Signup</title>
 </head>
 <body>
+    <style>
+        .error{
+            color: red;
+        }
+        .info{
+            color: darkgreen;
+        }
+    </style>
     <h1>Signup</h1>
+    {% with messages = get_flashed_messages(with_categories = true)  %}
+        {% if messages %}
+            {% for categories, message in messages %}
+            <p class="{{categories}}">{{message}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <form action="" method="post">
         <input type="email" name="email" id="email" placeholder="Enter your Email">
         <input type="password" name="password" id="password" placeholder="Enter password">
